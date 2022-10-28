@@ -1,11 +1,11 @@
 Story 1: I want to be able to log in with my spotify account so that concerts can be recommended to me based on my song history.
 
 Success:
-User authenticates using Spotify login
-User doesn’t have Spotify account and is redirected to the spotify website and prompted to create an account
-User prompted to put in an email and/or phone number to receive notifications about upcoming concerts/events that they have saved/liked
+- User authenticates using Spotify login
+- User doesn’t have Spotify account and is redirected to the spotify website and prompted to create an account
+- User prompted to put in an email and/or phone number to receive notifications about upcoming concerts/events that they have saved/liked
 
 Failure:
-User is having issues logging in and can submit feedback/request support
-User can click Forgot Password which will direct them to Spotify Login page 
+- User is having issues logging in and can submit feedback/request support
+- User can click Forgot Password which will direct them to Spotify Login page 
 
