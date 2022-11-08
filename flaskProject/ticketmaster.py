@@ -1,21 +1,38 @@
-from django.shortcuts import render
-import requests as req
+from flask import Flask, jsonify, request
+import requests
+import json
 
-api_keys='OtkvG6viu5AsLPGGjQ1fSQR4tuqNYWNZ'
-def artist_search(request):
-    return render(request,'concert/artist_search.html')
+app = Flask(__name__)
 
-def concert_list(request):
-    print("REQUEST:", request.POST['artist'])
-    aritist = request. POST['artist']
-    ticket_master_url = generate_ticket_master_url(artist)
-    response = req.get(ticket_master_url)
-    print("RESPONSE:",response.json())
-    #return render(request, 'concert/artist_concert.html',)
-    pass
-def generate_ticket_master_url(artist):
-    modified_aritist = artist.replace('',"+")
-    url= 'https://app.ticketmaster.com/discovery/v2/events.json?keyword='+ modified_aritist + api_keys
-    return url
+apikey = 'OtkvG6viu5AsLPGGjQ1fSQR4tuqNYWNZ'
+search_url = "https://app.ticketmaster.com/discovery/v2/events.json"
 
-#https://app.ticketmaster.com/discovery/v2/events.json?keyword=lady+gaga&apikey=OtkvG6viu5AsLPGGjQ1fSQR4tuqNYWNZ
+
+@app.route("/")
+def hello():
+    return jsonify({"about": "Hello World!"})
+
+
+@app.route("/get_events", methods=['GET', 'POST'])
+def events():
+    if request.method == 'POST':
+        # store the file that is passed in with the POST request
+        file = request.files['file']
+        data = json.load(file)
+    else:  # For debugging, if script.py didnt make a POST request, just manually load the file
+        with open('request.json') as f:
+            data = json.load(f)
+
+    # Payload that will be sent to the ticketmaster API
+    payload = {"postalCode": data['postalCode'], "startDateTime": data['startDateTime'],
+               "endDateTime": data['endDateTime'], "city": data['city'], "apikey": apikey}
+    # Make a request to the ticketmaster api given the URL and the parameters
+    search = requests.get(search_url, params=payload)
+    # Turn response into json
+    search_json = search.json()
+
+    return jsonify(search_json)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
