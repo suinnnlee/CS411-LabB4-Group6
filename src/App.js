@@ -1,24 +1,36 @@
 import logo from './logo.svg';
 import './App.css';
+import SearchBar from './Components/SearchBar.js';
+import { useEffect } from 'react';
 
 function App() {
+  // const [data, setdata] = useState({
+  //   concert: "",
+  //   URL: "",
+  //   date: "",
+  //   location: "",
+  // });
+
+  // // Using useEffect for single rendering
+  // useEffect(() => {
+  //     // Using fetch to fetch the api from 
+  //     // flask server it will be redirected to proxy
+  //     fetch("/data").then((res) =>
+  //         res.json().then((data) => {
+  //             // Setting a data from api
+  //             setdata({
+  //                 concert: data.Concert,
+  //                 URL: data.URL,
+  //                 date: data.Date,
+  //                 location: data.location,
+  //             });
+  //         })
+  //     );
+  // }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <SearchBar />
+    
   );
 }
 
