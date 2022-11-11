@@ -4,7 +4,7 @@ import json
 
 app = Flask(__name__)
 
-apikey = 'OtkvG6viu5AsLPGGjQ1fSQR4tuqNYWNZ'
+apikey = 's2oO5t5X9U4lnJ5BMtzAGSAGWBSlU9zk' #hide on repo
 search_url = "https://app.ticketmaster.com/discovery/v2/events.json"
 
 
@@ -24,14 +24,23 @@ def events():
             data = json.load(f)
 
     # Payload that will be sent to the ticketmaster API
-    payload = {"postalCode": data['postalCode'], "startDateTime": data['startDateTime'],
-               "endDateTime": data['endDateTime'], "city": data['city'], "apikey": apikey}
+    payload = {"size": data['size'], "city": data['city'], "apikey": apikey}
     # Make a request to the ticketmaster api given the URL and the parameters
     search = requests.get(search_url, params=payload)
+
     # Turn response into json
     search_json = search.json()
 
-    return jsonify(search_json)
+    search_json_filtered = {
+        "name": search_json['_embedded']['events'][0]['name'],
+        "url": search_json['_embedded']['events'][0]['url']
+    }
+
+    return jsonify(json.dumps(search_json_filtered, indent = 4))
+
+
+if __name__ == '__main__':
+    app.run(debug=True) #set to false on production
 
 
 if __name__ == '__main__':
