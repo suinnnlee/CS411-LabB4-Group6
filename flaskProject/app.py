@@ -8,7 +8,7 @@ import pandas as pd
 # App config
 app = Flask(__name__)
 
-app.secret_key = 'secret_key'
+app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
 
@@ -53,14 +53,15 @@ def get_all_tracks():
         curGroup = sp.current_user_saved_tracks(limit=50, offset=offset)['items']
         for idx, item in enumerate(curGroup):
             track = item['track']
-            val = track['name'] + " - " + track['artists'][0]['name']
+            val = track['artists'][0]['name']
             results += [val]
         if (len(curGroup) < 50):
             break
 
     '''df = pd.DataFrame(results, columns=["song names"])
     df.to_csv('songs.csv', index=False)'''
-    return curGroup
+    return results
+
 
 
 # Checks to see if token is valid and gets a new token if not
@@ -88,8 +89,8 @@ def get_token():
 
 def create_spotify_oauth():
     return SpotifyOAuth(
-        client_id="client_id",
-        client_secret="sercret_id",
+        client_id="1933a86907714b4a97765c8836a4fd00",
+        client_secret="837e4b8f92eb45b787daf6c243dfae8c",
         redirect_uri=url_for('authorize', _external=True),
         scope="user-library-read")
 
