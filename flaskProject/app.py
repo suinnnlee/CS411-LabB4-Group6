@@ -4,6 +4,9 @@ from flask import Flask, url_for, session, request, redirect
 import json
 import time
 import pandas as pd
+import re
+
+from ticketmaster import get_events
 
 # App config
 app = Flask(__name__)
@@ -57,12 +60,19 @@ def get_all_tracks():
             results += [val]
         if (len(curGroup) < 50):
             break
-
     '''df = pd.DataFrame(results, columns=["song names"])
     df.to_csv('songs.csv', index=False)'''
+    '''results=re.sub(r"\s+", '-', results)'''
     return results
+    # return get_events(results[1])
 
 
+
+def find_concerts():
+    results = get_all_tracks()
+    for i in results:
+        print(i)
+    return results
 
 # Checks to see if token is valid and gets a new token if not
 def get_token():
