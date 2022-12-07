@@ -1,3 +1,6 @@
+import xdrlib
+from xml.dom import xmlbuilder
+from xml.sax import default_parser_list
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, url_for, session, request, redirect
@@ -60,15 +63,19 @@ def get_all_tracks():
             results += [val]
         if (len(curGroup) < 50):
             break
-    '''df = pd.DataFrame(results, columns=["song names"])
-    df.to_csv('songs.csv', index=False)'''
-    '''results=re.sub(r"\s+", '-', results)'''
-    return results
+    # '''df = pd.DataFrame(results, columns=["song names"])
+    # df.to_csv('songs.csv', index=False)'''
+    # '''results=re.sub(r"\s+", '-', results)'''
+    string=""
+    counter =0 
+    for artist in results:
+        artist_name=string.join(artist)
+        result = artist_name.replace(' ', '_')
+        get_events(result)
+    return search_url
     # return get_events(results[1])
 
-
-
-def find_concerts():
+def get_concerts():
     results = get_all_tracks()
     for i in results:
         print(i)
