@@ -1,6 +1,0 @@
-Our project will be a website that looks at song artists and music genres that the user listens to and creates a ranking of most listened to artists and music genres. 
-Then, it will find upcoming concerts and events in the US that the user might like. We will use the Spotify API and Discovery API from TicketMaster. 
-The user will need to log in using their Spotify account. 
-Frontend coding: JavaScript with React.
-Backend coding: Python with Flask
-Db: MongoDB
