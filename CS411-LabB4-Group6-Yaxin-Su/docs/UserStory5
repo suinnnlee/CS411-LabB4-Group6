@@ -1,6 +1,0 @@
-Story 5: I want to be notified of certain concerts that I plan on attending.
-
-- User can click on a notification button to receive notifications for that specific concert
-- Up to a week before the concert, user would receive a notification by email/text message (set on first login)
-- Once they have decided on a concert that they are attending, it can create a google calendar invite which has the date, time, location of the event.
-- If the user clicks on the notification button a second time, the notification is canceled.
