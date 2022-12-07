@@ -8,12 +8,16 @@ import json
 import time
 import pandas as pd
 import re
-
 from ticketmaster import get_events
+from flask import Flask
+from pymongo import MongoClient
 
 # App config
 app = Flask(__name__)
+client = MongoClient('localhost', 27017)
 
+db = client.flask_db
+todos = db.todos
 app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
@@ -44,8 +48,8 @@ def logout():
     return redirect('/')
 
 
-@app.route('/getTracks')
-def get_all_tracks():
+@app.route('/getArtists')
+def get_all_artists():
     session['token_info'], authorized = get_token()
     session.modified = True
     if not authorized:
@@ -66,20 +70,39 @@ def get_all_tracks():
     # '''df = pd.DataFrame(results, columns=["song names"])
     # df.to_csv('songs.csv', index=False)'''
     # '''results=re.sub(r"\s+", '-', results)'''
-    string=""
-    counter =0 
-    for artist in results:
-        artist_name=string.join(artist)
-        result = artist_name.replace(' ', '_')
-        get_events(result)
-    return search_url
-    # return get_events(results[1])
 
-def get_concerts():
-    results = get_all_tracks()
-    for i in results:
-        print(i)
     return results
+
+@app.route('/recommendConcerts')
+def recommended_concerts():
+    concert_dict = {}
+    results = get_all_artists()
+    string=""
+    counter = 0 
+
+    for artist in results:
+        if counter < 5:
+            artist_name = string.join(artist)
+            result = artist_name.replace(' ', '%20')
+            concert_dict.update(get_concerts(get_events(result)))
+            counter += 1
+        else:
+            break
+
+    concert_json = json.dumps(concert_dict)
+    return concert_json
+def get_concerts(data_json):
+    concert_json = {}
+    counter = 0
+
+    for concert in data_json['events']:
+        if counter < 5:
+            concert_json.update(concert)
+            counter += 1
+        else:
+            break
+    
+    return concert_json
 
 # Checks to see if token is valid and gets a new token if not
 def get_token():
