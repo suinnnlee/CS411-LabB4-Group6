@@ -8,9 +8,10 @@ import json
 import time
 import pandas as pd
 import re
-from ticketmaster import get_events
 from flask import Flask
 from pymongo import MongoClient
+from urllib.request import urlopen
+
 
 # App config
 app = Flask(__name__)
@@ -81,7 +82,7 @@ def recommended_concerts():
     counter = 0 
 
     for artist in results:
-        if counter < 5:
+        if counter < 1:
             artist_name = string.join(artist)
             result = artist_name.replace(' ', '%20')
             concert_dict.update(get_concerts(get_events(result)))
@@ -91,6 +92,7 @@ def recommended_concerts():
 
     concert_json = json.dumps(concert_dict)
     return concert_json
+
 def get_concerts(data_json):
     concert_json = {}
     counter = 0
@@ -104,6 +106,13 @@ def get_concerts(data_json):
     
     return concert_json
 
+def get_events(artist):
+    url= 'https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&keyword='+artist+'&apikey=s2oO5t5X9U4lnJ5BMtzAGSAGWBSlU9zk'
+    response = urlopen(url)
+    print("hello")
+    data_json = json.loads(response.read())
+    return data_json["_embedded"]
+    
 # Checks to see if token is valid and gets a new token if not
 def get_token():
     token_valid = False
