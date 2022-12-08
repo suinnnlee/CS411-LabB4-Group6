@@ -11,18 +11,21 @@ import re
 from flask import Flask
 from pymongo import MongoClient
 from urllib.request import urlopen
-
+from flask_pymongo import PyMongo
+from pymongo import MongoClient
 
 # App config
 app = Flask(__name__)
-client = MongoClient('localhost', 27017)
-
-db = client.flask_db
-todos = db.todos
 app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
-
+app.config["MONGO_URI"] = "mongodb+srv://jessicasu1023:<Err6aroa>@cluster0.ofrqirq.mongodb.net/?retryWrites=true&w=majority"
+#db_operations = mongo.db.<COLLECTION_NAME>
+client=MongoClient("mongodb+srv://jessicasu1023:<Err6aroa>@cluster0.ofrqirq.mongodb.net/?retryWrites=true&w=majority")
+mongo = PyMongo(app)
+db=client["concerts"]
+col=db["mycolumn"]
+# x = col.insert_many
 
 @app.route('/')
 def login():
@@ -39,7 +42,7 @@ def authorize():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session["token_info"] = token_info
-    return redirect("/getTracks")
+    return redirect("/recommendConcerts")
 
 
 @app.route('/logout')
@@ -82,23 +85,28 @@ def recommended_concerts():
     counter = 0 
 
     for artist in results:
-        if counter < 1:
+        if counter < 10:
             artist_name = string.join(artist)
             result = artist_name.replace(' ', '%20')
-            concert_dict.update(get_concerts(get_events(result)))
+            artist_key = artist_name.replace(' ', '_')
+            print(artist_name)
+            concert_dict[artist_key] = get_concert(get_events(result))
             counter += 1
         else:
             break
 
     concert_json = json.dumps(concert_dict)
+    x = col.insert_many(concert_dict)
+    print(x)
     return concert_json
 
-def get_concerts(data_json):
+
+def get_concert(data_json):
     concert_json = {}
     counter = 0
 
     for concert in data_json['events']:
-        if counter < 5:
+        if counter < 1:
             concert_json.update(concert)
             counter += 1
         else:
@@ -109,7 +117,6 @@ def get_concerts(data_json):
 def get_events(artist):
     url= 'https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&keyword='+artist+'&apikey=s2oO5t5X9U4lnJ5BMtzAGSAGWBSlU9zk'
     response = urlopen(url)
-    print("hello")
     data_json = json.loads(response.read())
     return data_json["_embedded"]
     
