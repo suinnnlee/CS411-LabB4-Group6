@@ -1,0 +1,27 @@
+body {
+    background-color:  rgb(18, 18, 18);
+    background-image: linear-gradient(rgba(255,255,255,0.1),transparent);
+    background-image: url("../../assets/background.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-size: cover;
+}
+
+button {
+    padding: 2em;
+    display: grid;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin: auto;
+    padding: 0.5rem;
+
+    transition: .3s;
+}
+
+button:hover{
+    scale: 1.2;
+    box-shadow: 20px 20px 25px rgba(203, 203, 203, 0.03);
+}
