@@ -11,21 +11,21 @@ import re
 from flask import Flask
 from pymongo import MongoClient
 from urllib.request import urlopen
-from flask_pymongo import PyMongo
-from pymongo import MongoClient
+
 
 # App config
 app = Flask(__name__)
+client = MongoClient('mongodb+srv://jessicasu1023:Err6aroa@cluster0.ofrqirq.mongodb.net/test')
+ 
+# Creating a database name GFG
+db = client['mydb']
+col = db['ourApp']
+rec = col.insert_one({"Concerts": [], "Artists": [], "id":"hi"})
+
 app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
-app.config["MONGO_URI"] = "mongodb+srv://jessicasu1023:<Err6aroa>@cluster0.ofrqirq.mongodb.net/?retryWrites=true&w=majority"
-#db_operations = mongo.db.<COLLECTION_NAME>
-client=MongoClient("mongodb+srv://jessicasu1023:<Err6aroa>@cluster0.ofrqirq.mongodb.net/?retryWrites=true&w=majority")
-mongo = PyMongo(app)
-db=client["concerts"]
-col=db["mycolumn"]
-# x = col.insert_many
+
 
 @app.route('/')
 def login():
@@ -89,17 +89,14 @@ def recommended_concerts():
             artist_name = string.join(artist)
             result = artist_name.replace(' ', '%20')
             artist_key = artist_name.replace(' ', '_')
-            print(artist_name)
             concert_dict[artist_key] = get_concert(get_events(result))
             counter += 1
         else:
             break
 
     concert_json = json.dumps(concert_dict)
-    x = col.insert_many(concert_dict)
-    print(x)
+    # rec = col.insert_one(concert_dict)
     return concert_json
-
 
 def get_concert(data_json):
     concert_json = {}
@@ -119,7 +116,46 @@ def get_events(artist):
     response = urlopen(url)
     data_json = json.loads(response.read())
     return data_json["_embedded"]
-    
+get_events("Adele")
+
+@app.route("/getFavorites")
+def get_favorites():
+    concert_dict = {}
+    fav_concert_item = col.find_one({"id":"hi"})
+    fav_concert_list = fav_concert_item["Concerts"]
+    fav_artist_list = fav_concert_item["Artists"]
+    i = 0
+
+    for concert in fav_concert_list:
+        artist = fav_artist_list[i]
+        the_concert = col.find_one({artist+".name":concert})
+        concert_dict[artist] = the_concert[artist]
+        i += 1
+
+    concert_json = json.dumps(concert_dict)
+    return concert_json
+
+@app.route("/setFavorite")
+def set_favorite(concert_name, artist_name):
+    concert_exists = False
+    fav_concert_item = col.find_one({"id":"hello"})
+    fav_concert_list = fav_concert_item["Concerts"]
+    fav_artist_list = fav_concert_item["Artists"]
+    for concert in fav_concert_list:
+        if concert == concert_name:
+            fav_concert_list.remove(concert)
+            concert_exists = True
+    for artist in fav_artist_list:
+        if artist == artist_name:
+            fav_artist_list.remove(artist)
+            concert_exists = True
+    if not concert_exists:
+        fav_concert_list.append(concert_name)
+        fav_artist_list.append(artist_name)
+
+    rec = col.update_one({"id":"hi"}, {"$set":{"Concerts":fav_concert_list, "Artists":fav_artist_list}})
+    return fav_concert_list
+
 # Checks to see if token is valid and gets a new token if not
 def get_token():
     token_valid = False
