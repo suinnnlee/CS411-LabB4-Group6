@@ -15,10 +15,13 @@ from urllib.request import urlopen
 
 # App config
 app = Flask(__name__)
-client = MongoClient('localhost', 27017)
+client = MongoClient('mongodb+srv://mchoe:ForSchool23%21@cs411b4g6.e9hxzy4.mongodb.net/test')
+ 
+# Creating a database name GFG
+db = client['mydb']
+col = db['concerts']
+rec = col.insert_one({"Faves": [""], "id":"hello"})
 
-db = client.flask_db
-todos = db.todos
 app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
@@ -92,8 +95,8 @@ def recommended_concerts():
             break
 
     concert_json = json.dumps(concert_dict)
+    rec = col.insert_one(concert_dict)
     return concert_json
-
 
 def get_concert(data_json):
     concert_json = {}
@@ -113,7 +116,36 @@ def get_events(artist):
     response = urlopen(url)
     data_json = json.loads(response.read())
     return data_json["_embedded"]
-    
+print(get_events("Adele"))
+
+@app.route("/getFavorites")
+def get_favorites():
+    concert_dict = {}
+    fav_artist_item = col.find_one({"id":"hello"})
+    fav_artist_list = fav_artist_item["Faves"]
+    for artist in fav_artist_list:
+        concert = col.find_one({artist})
+        concert_dict[artist] = concert
+
+    concert_json = json.dumps(concert_dict)
+    return concert_json
+
+
+@app.route("/setFavorite")
+def set_favorite(the_artist):
+    artist_exists = False
+    fav_artist_item = col.find_one({"id":"hello"})
+    fav_artist_list = fav_artist_item["Faves"]
+    for artist in fav_artist_list:
+        if artist == the_artist:
+            fav_artist_list.remove(the_artist)
+            artist_exists = True
+    if not artist_exists:
+        fav_artist_list.append(the_artist)
+
+    rec = col.update_one({"$set" : {"id":"hello", "Faves":fav_artist_list}})
+    return fav_artist_list
+
 # Checks to see if token is valid and gets a new token if not
 def get_token():
     token_valid = False
