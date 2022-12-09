@@ -126,7 +126,23 @@ header {
 .container{
  margin: auto;
  /* background-color:  rgba(61, 14, 122, 0.185); */
- width: 70%;
+ width: 90%;
+}
+
+.CardText {
+  display: flex;
+  flex-direction: column;
+}
+
+.CardInfo {
+  /* display: flex; */
+  flex-direction: row;
+  margin: auto;
+}
+
+.CardInfo .SaveIcon {
+  justify-content: flex-end;
+  display: flex;
 }
 
 .slider {

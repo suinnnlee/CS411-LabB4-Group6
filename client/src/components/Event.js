@@ -11,13 +11,17 @@ const Event = ({ event, index }) => {
                 <div class="thumbnail">
                     <img src={event.images[9].url} alt="event_image"/>
                 </div>
-                <div>
-                    <h2 class="text_shadow" title={event.name}>{event.name}</h2>
-                    <p style={{color: '#959595'}}><strong>{event.dates.start.localDate}</strong></p> 
+                <div className="CardInfo">
+                    <div className="CardText">
+                        <h2 class="text_shadow" title={event.name}>{event.name}</h2>
+                        <p style={{color: '#959595'}}><strong>{event.dates.start.localDate}</strong></p>
+                    </div>
+                    <div className="SaveIcon">
+                        <button>
+                            <div><Icon/></div>
+                        </button>
+                    </div>
                 </div>
-                <button>
-                    <div><Icon/></div>
-                </button>
             </button>
     )
 }
