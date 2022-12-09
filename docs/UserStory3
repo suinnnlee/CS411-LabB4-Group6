@@ -1,0 +1,9 @@
+Story 3: I want to be able to filter my recommended concerts by location, dates, and prices. 
+
+Success
+- Users should be able to enter their zip code/city and the radius (miles) they are willing to travel to and the recommendations will be sorted by location (filtered by closest to their current location)
+- Users should be able to enter the desired date and sort the recommendation by date.
+- Users should be able to enter a range of desired prices and sort the recommendation by price range (can choose to filter by either decreasing or increasing prices)
+
+Failure:
+- If no concert applies to the filter, then show “no concerts found [in designated area, etc]”
