@@ -2,5 +2,3 @@ Story 2: I want to be able to view recommendations on concerts I would like.
 
 - Users can view a list of recommendations on concerts based on their spotify history (genre, artists)
     - Run an analysis on their playlists and listening history and track how many minutes the user spent listening to a certain artist or genre and rank them in order of most listened to 
-- Concerts that feature artists the user listens to and also new recommended artists based on genre 
-- User has no listening history and is prompted to start listening to get recommendations or the user can also type in certain artists/genres they like 
