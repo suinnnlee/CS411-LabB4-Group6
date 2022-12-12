@@ -2,5 +2,3 @@ Story 3: I want to be able to save concerts I am thinking about going to.
 
 - Users can click on a like button that saves those concerts
 - Users can view the list of concerts that they have liked on a separate page 
-- The list of concerts that they have liked can be filtered by increasing or decreasing price/distance. 
-- If the user clicks on the like button a second time, the concert is removed from the saved list.
