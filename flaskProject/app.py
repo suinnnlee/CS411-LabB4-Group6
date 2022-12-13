@@ -8,10 +8,19 @@ import json
 import time
 import pandas as pd
 import re
-from ticketmaster import get_events
+from flask import Flask
+from pymongo import MongoClient
+from urllib.request import urlopen
+
 
 # App config
 app = Flask(__name__)
+client = MongoClient('mongodb+srv://mchoe:ForSchool23%21@cs411b4g6.e9hxzy4.mongodb.net/test')
+ 
+# Creating a database name GFG
+db = client['mydb']
+col = db['concerts']
+rec = col.insert_one({"Faves": [""], "id":"hello"})
 
 app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
@@ -33,7 +42,7 @@ def authorize():
     code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
     session["token_info"] = token_info
-    return redirect("/getTracks")
+    return redirect("/recommendConcerts")
 
 
 @app.route('/logout')
@@ -76,29 +85,66 @@ def recommended_concerts():
     counter = 0 
 
     for artist in results:
-        if counter < 5:
+        if counter < 10:
             artist_name = string.join(artist)
             result = artist_name.replace(' ', '%20')
-            concert_dict.update(get_concerts(get_events(result)))
+            artist_key = artist_name.replace(' ', '_')
+            concert_dict[artist_key] = get_concert(get_events(result))
             counter += 1
         else:
             break
 
     concert_json = json.dumps(concert_dict)
+    rec = col.insert_one(concert_dict)
     return concert_json
 
-def get_concerts(data_json):
+def get_concert(data_json):
     concert_json = {}
     counter = 0
 
     for concert in data_json['events']:
-        if counter < 5:
+        if counter < 1:
             concert_json.update(concert)
             counter += 1
         else:
             break
     
     return concert_json
+
+def get_events(artist):
+    url= 'https://app.ticketmaster.com/discovery/v2/events.json?classificationName=music&keyword='+artist+'&apikey=s2oO5t5X9U4lnJ5BMtzAGSAGWBSlU9zk'
+    response = urlopen(url)
+    data_json = json.loads(response.read())
+    return data_json["_embedded"]
+print(get_events("Adele"))
+
+@app.route("/getFavorites")
+def get_favorites():
+    concert_dict = {}
+    fav_artist_item = col.find_one({"id":"hello"})
+    fav_artist_list = fav_artist_item["Faves"]
+    for artist in fav_artist_list:
+        concert = col.find_one({artist})
+        concert_dict[artist] = concert
+
+    concert_json = json.dumps(concert_dict)
+    return concert_json
+
+
+@app.route("/setFavorite")
+def set_favorite(the_artist):
+    artist_exists = False
+    fav_artist_item = col.find_one({"id":"hello"})
+    fav_artist_list = fav_artist_item["Faves"]
+    for artist in fav_artist_list:
+        if artist == the_artist:
+            fav_artist_list.remove(the_artist)
+            artist_exists = True
+    if not artist_exists:
+        fav_artist_list.append(the_artist)
+
+    rec = col.update_one({"$set" : {"id":"hello", "Faves":fav_artist_list}})
+    return fav_artist_list
 
 # Checks to see if token is valid and gets a new token if not
 def get_token():
