@@ -5,7 +5,7 @@ import json
 
 app = Flask(__name__)
 
-apikey = 's2oO5t5X9U4lnJ5BMtzAGSAGWBSlU9zk' #hide on repo
+apikey = 'apikey' #hide on repo
 
 
 
