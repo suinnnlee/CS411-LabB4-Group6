@@ -22,7 +22,7 @@ db = client['mydb']
 col = db['concerts']
 rec = col.insert_one({"Faves": [""], "id":"hello"})
 
-app.secret_key = '837e4b8f92eb45b787daf6c243dfae8c'
+app.secret_key = 'app.secret_key'
 app.config['SESSION_COOKIE_NAME'] = 'spotify-login-session'
 TOKEN_INFO ="token_info"
 
@@ -171,8 +171,8 @@ def get_token():
 
 def create_spotify_oauth():
     return SpotifyOAuth(
-        client_id="1933a86907714b4a97765c8836a4fd00",
-        client_secret="837e4b8f92eb45b787daf6c243dfae8c",
+        client_id="client_id",
+        client_secret="client_secret",
         redirect_uri=url_for('authorize', _external=True),
         scope="user-library-read")
 
