@@ -1,0 +1,243 @@
+:root {
+  --animation-order: 0;
+  overflow:auto;
+}
+
+body {
+  background-color:  rgb(18, 18, 18);
+  margin: 0;
+  font-family: 'Montserrat',
+    sans-serif;
+  color: rgb(255, 255, 255);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+header {
+  scale: 1.2;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(rgba(255,255,255,0.1),transparent);
+}
+
+.log-button {
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #1DB954;
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: rgba(30, 215, 96, .1) 0 0 0 1px inset,rgba(30, 215, 96, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-size: 100%;
+  height: 2rem;
+  line-height: 1.15;
+  /* margin: 12px 0 0; */
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transform: translateZ(0);
+  transition: all .2s,box-shadow .08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100px;
+}
+
+.log-button:hover{
+  scale: 1.04;
+}
+
+.home-header:hover{
+  color: #6fff00;
+  animation: bgColor 2s infinite linear;
+}
+
+@keyframes bgColor {
+  12.5% {
+    color: #03fd20;
+    scale: 1.01;
+  }
+  25% {
+    color: #00ff95;
+    scale: 1.02;
+  }
+  37.5% {
+    color: #00ff6a;
+    scale: 1.03;
+  }
+  50% {
+    color: #00ffc8;
+    scale: 1.04;
+  }
+  62.5% {
+    color: #00FFFF;
+    scale: 1.03;
+  }
+  75% {
+    color: #00ff62;
+    scale: 1.02;
+  }
+  87.5% {
+    color: #32cc35;
+    scale: 1.01;
+  }
+  100% {
+    color: #66ff14;
+    scale: 1;
+  }
+}
+
+.log-button:disabled {
+  cursor: default;
+}
+
+.log-button:focus {
+  box-shadow: rgba(30, 215, 96, .1) 0 0 0 1px inset, rgba(30, 215, 96, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(127, 212, 157, 0.3) 0 0 0 4px;
+}
+.text_shadow {
+  text-shadow: 1px 1px 4px #1b1b1b;
+}
+
+.background {
+  position:fixed;
+  padding:0;
+  margin:0;
+
+  top:0;
+  left:0;
+
+  width: 100%;
+  height: 100%;
+
+  background-image: url("./background.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-size: cover;
+
+  /* background-color: rgba(18,18,18,1); */
+}
+
+.search_in{
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 40px;
+  width: 20em;
+  text-size-adjust: auto;
+  padding: 10px;
+  outline: none;
+}
+
+@keyframes animateIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateY(-8px);
+  }
+  
+  100% {
+    opacity: 1;
+  }
+}
+
+
+.card {
+  display: block;
+  flex-direction: column;
+  margin: 1em;
+  padding: 1em;
+  text-align: left;
+  background-color: rgb(24,24,24);
+  border: none;
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
+  width: 18em;
+  /* align-self: center; */
+
+  max-height:275px;
+  animation-name: animateIn;
+  animation-duration: 100ms;
+  /* animation-delay: calc(var(--animation-order) * 100ms); */
+  animation-delay: 2ms;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+
+  background-color: rgba(98, 149, 113, 0.2);
+  box-shadow: 20px 20px 25px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  /* -webkit-backdrop-filter: blur(6.4px); */
+  /* border: 1px solid rgba(152, 152, 152, 0.12); */
+
+  transition: .3s;
+}
+
+.card h2 {
+  max-width: 10em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card:hover{
+  background-color: rgba(112, 165, 155, 0.35);
+  scale: 1.02;
+  box-shadow: 20px 20px 25px rgba(203, 203, 203, 0.03);
+}
+
+.thumbnail > img {
+  width: 16em;
+  height: 8em;
+  border-radius: 5px;
+  object-fit: cover;
+  object-position: center;
+  box-shadow: 0px 0px 20px 0px rgba(18, 18, 18, 0.5)
+}
+
+.container{
+ margin: auto;
+ /* background-color:  rgba(61, 14, 122, 0.185); */
+ /* width: 90%; */
+ /* height: 100vh; */
+ /* display: flex;
+  */
+}
+
+.CardText {
+  display: flex;
+  flex-direction: column;
+}
+
+.CardInfo {
+  /* display: flex; */
+  flex-direction: row;
+  margin: auto;
+}
+
+.CardInfo .SaveIcon {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.slider {
+  /* flex: 1; */
+  /* min-height: min-content; */
+  height: 1000px;
+  padding-top: 1rem;
+  /* padding-right: 0px; */
+  display: flex;
+  flex-wrap: wrap;
+  overflow:auto;
+  justify-content: center;
+}
